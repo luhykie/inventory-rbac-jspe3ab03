@@ -1,61 +1,88 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-@section('title', 'Register')
+    <title>Register | Conexia</title>
 
-@section('content')
-<div class="card" style="max-width: 420px; margin: 40px auto;">
-    <h1>Create an Account</h1>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 
-    @if ($errors->any())
-        <div class="alert">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+<body>
+    <main>
+        <h1>Create an Account</h1>
 
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+        @if ($errors->any())
+            <div>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
-        </div>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required>
-        </div>
+            <div>
+                <label for="name">Name</label>
 
-        <div class="form-group">
-            <label for="role_id">Role</label>
-            <select id="role_id" name="role_id" required>
-                <option value="">-- Select a role --</option>
-                @foreach (\App\Models\Role::where('slug', '!=', 'system-administrator')->get() as $role)
-                    <option value="{{ $role->id }}" @selected(old('role_id') == $role->id)>
-                        {{ $role->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    value="{{ old('name') }}"
+                    required
+                    autofocus
+                >
+            </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input id="password" type="password" name="password" required>
-        </div>
+            <div>
+                <label for="email">Email</label>
 
-        <div class="form-group">
-            <label for="password_confirmation">Confirm Password</label>
-            <input id="password_confirmation" type="password" name="password_confirmation" required>
-        </div>
+                <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    required
+                >
+            </div>
 
-        <button type="submit" class="btn">Register</button>
-    </form>
+            <div>
+                <label for="password">Password</label>
 
-    <p style="margin-top: 16px;">
-        Already have an account? <a href="{{ route('login') }}">Log in</a>
-    </p>
-</div>
-@endsection
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    required
+                >
+            </div>
+
+            <div>
+                <label for="password_confirmation">
+                    Confirm Password
+                </label>
+
+                <input
+                    id="password_confirmation"
+                    type="password"
+                    name="password_confirmation"
+                    required
+                >
+            </div>
+
+            <button type="submit">
+                Register
+            </button>
+        </form>
+
+        <a href="{{ route('login') }}">
+            Already have an account? Sign in
+        </a>
+    </main>
+</body>
+</html>
