@@ -1,0 +1,234 @@
+/* ============================================================
+   Inventory RBAC — Core CSS (no frameworks)
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --ink: #1f2933;
+    --muted: #616e7c;
+    --line: #d9dee3;
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --primary: #1d4ed8;
+    --primary-dark: #1e40af;
+    --danger: #b91c1c;
+    --success-bg: #ecfdf5;
+    --success-ink: #065f46;
+}
+
+body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+}
+
+/* ---------- Navigation ---------- */
+.navbar {
+    background: #111827;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+}
+
+.navbar .brand { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.02em; }
+
+.navbar nav { display: flex; align-items: center; gap: 1rem; }
+
+.navbar a { color: #d1d5db; text-decoration: none; font-size: 0.95rem; }
+.navbar a:hover { color: #fff; }
+
+.navbar .user-label { color: #9ca3af; font-size: 0.85rem; }
+
+/* ---------- Layout ---------- */
+.container { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.page-header h1 { font-size: 1.4rem; }
+
+/* ---------- Tables ---------- */
+table { width: 100%; border-collapse: collapse; }
+
+th, td {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+}
+
+th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+td.num, th.num { text-align: right; }
+
+tr:hover td { background: #f9fafb; }
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-block;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn:hover { background: var(--primary-dark); }
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline:hover { background: #eff6ff; }
+
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #991b1b; }
+
+.btn-sm { padding: 0.25rem 0.6rem; font-size: 0.8rem; }
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #d1d5db;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+}
+
+.btn-link:hover { color: #fff; }
+
+.actions { display: flex; gap: 0.4rem; }
+
+/* ---------- Forms ---------- */
+.form-group { margin-bottom: 1rem; }
+
+label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.9rem; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+input:focus, textarea:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+    border-color: var(--primary);
+}
+
+.form-actions { display: flex; gap: 0.6rem; margin-top: 1.25rem; }
+
+/* ---------- Alerts and errors ---------- */
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    background: var(--success-bg);
+    color: var(--success-ink);
+    border: 1px solid #a7f3d0;
+}
+
+.error { color: var(--danger); font-size: 0.85rem; margin-top: 0.25rem; }
+
+/* ---------- Detail list ---------- */
+.detail-list { list-style: none; }
+
+.detail-list li {
+    display: flex;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.detail-list li span:first-child {
+    width: 160px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* ---------- Auth ---------- */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 2rem;
+}
+
+.auth-card h1 { font-size: 1.3rem; margin-bottom: 1.25rem; text-align: center; }
+
+/* ---------- Pagination ---------- */
+.pagination-wrap { margin-top: 1rem; }
+
+/* ---------- Report / print ---------- */
+.report-header { text-align: center; margin-bottom: 1.5rem; }
+.report-header h1 { font-size: 1.3rem; }
+.report-header p { color: var(--muted); font-size: 0.9rem; }
+
+.report-summary { margin-top: 1rem; font-weight: 600; }
+
+@media print {
+    .navbar, .no-print { display: none !important; }
+    body { background: #fff; }
+    .container { margin: 0; max-width: 100%; }
+    .card { border: none; padding: 0; }
+}
+
+/* ---------- Pager ---------- */
+.pager { display: flex; align-items: center; gap: 1rem; }
+
+.pager-link {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--primary);
+    font-size: 0.85rem;
+    background: #fff;
+}
+
+.pager-link:hover { background: #eff6ff; }
+
+.pager-link.disabled { color: var(--muted); pointer-events: none; background: var(--bg); }
+
+.pager-status { font-size: 0.85rem; color: var(--muted); }
