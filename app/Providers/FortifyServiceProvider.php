@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use App\Actions\Fortify\CreateNewUser;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -19,6 +20,8 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::loginView(fn () => view('auth.login'));
+
+        Fortify::createUsersUsing(CreateNewUser::class);
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(
