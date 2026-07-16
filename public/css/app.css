@@ -134,7 +134,8 @@ input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
-textarea {
+textarea,
+select {
     width: 100%;
     padding: 0.5rem 0.65rem;
     border: 1px solid var(--line);
@@ -143,7 +144,7 @@ textarea {
     font-family: inherit;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
     outline: 2px solid var(--primary);
     outline-offset: 1px;
     border-color: var(--primary);

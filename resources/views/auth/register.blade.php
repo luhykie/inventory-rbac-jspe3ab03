@@ -3,86 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Register | Conexia</title>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>Register — Inventory System</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
-
 <body>
-    <main>
-        <h1>Create an Account</h1>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h1>Create an Account</h1>
 
-        @if ($errors->any())
-            <div>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+            @if ($errors->any())
+                <p class="error">{{ $errors->first() }}</p>
+            @endif
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
 
-            <div>
-                <label for="name">Name</label>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
+                </div>
 
-                <input
-                    id="name"
-                    type="text"
-                    name="name"
-                    value="{{ old('name') }}"
-                    required
-                    autofocus
-                >
-            </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                </div>
 
-            <div>
-                <label for="email">Email</label>
+                <div class="form-group">
+                    <label for="role_id">Role</label>
+                    <select id="role_id" name="role_id" required>
+                        <option value="">-- Select a role --</option>
+                        @foreach (\App\Models\Role::where('slug', '!=', 'system-administrator')->get() as $role)
+                            <option value="{{ $role->id }}" @selected(old('role_id') == $role->id)>
+                                {{ $role->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    required
-                >
-            </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-            <div>
-                <label for="password">Password</label>
+                <div class="form-group">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" required>
+                </div>
 
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    required
-                >
-            </div>
+                <button type="submit" class="btn" style="width: 100%;">Register</button>
+            </form>
 
-            <div>
-                <label for="password_confirmation">
-                    Confirm Password
-                </label>
-
-                <input
-                    id="password_confirmation"
-                    type="password"
-                    name="password_confirmation"
-                    required
-                >
-            </div>
-
-            <button type="submit">
-                Register
-            </button>
-        </form>
-
-        <a href="{{ route('login') }}">
-            Already have an account? Sign in
-        </a>
-    </main>
+            <p style="margin-top: 16px;">
+                Already have an account? <a href="{{ route('login') }}">Log in</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
