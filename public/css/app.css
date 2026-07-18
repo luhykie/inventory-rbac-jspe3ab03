@@ -233,3 +233,95 @@ input:focus, textarea:focus, select:focus {
 .pager-link.disabled { color: var(--muted); pointer-events: none; background: var(--bg); }
 
 .pager-status { font-size: 0.85rem; color: var(--muted); }
+
+.navbar nav a.active {
+    color: #ffffff;
+    font-weight: 700;
+    border-bottom: 2px solid #ffffff;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.permission-form {
+    min-width: 320px;
+}
+
+.permission-checkboxes {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.permission-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 9px 11px;
+    border: 1px solid #dbe2ea;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #344054;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.permission-option:hover {
+    border-color: #9db4e8;
+    background: #f8faff;
+}
+
+.permission-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    accent-color: #2859c5;
+}
+
+.permission-option span {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.permission-option small {
+    color: #667085;
+    font-size: 10px;
+}
+
+.permission-save-button {
+    width: 100%;
+}
+
+/* ---------- Inherited Role Permissions ---------- */
+
+.permission-inherited {
+    background: #ecfdf3;
+    border-color: #abefc6;
+}
+
+.permission-inherited:hover {
+    background: #dcfae6;
+    border-color: #75e0a7;
+}
+
+.permission-inherited input[type="checkbox"] {
+    cursor: not-allowed;
+}
+
+.permission-inherited small {
+    color: #067647;
+    font-weight: 600;
+}
+
+/* Make inherited permissions look disabled */
+.permission-option input[type="checkbox"]:disabled {
+    opacity: 0.85;
+}
+
+.permission-option:has(input:disabled) {
+    cursor: not-allowed;
+}

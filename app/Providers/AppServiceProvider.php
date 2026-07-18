@@ -17,7 +17,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        
         Gate::before(function (User $user, string $ability) {
             if ($user->hasRole('system-administrator')) {
                 return true;
@@ -26,15 +25,21 @@ class AppServiceProvider extends ServiceProvider
             return null;
         });
 
-        
         try {
-            if (Schema::hasTable('permissions')) {
-                Permission::pluck('slug')->each(function (string $slug) {
-                    Gate::define($slug, fn (User $user) => $user->hasPermission($slug));
-                });
+            if (! Schema::hasTable('permissions')) {
+                return;
             }
-        } catch (\Throwable) {
-            
+
+            Permission::query()
+                ->pluck('slug')
+                ->each(function (string $slug) {
+                    Gate::define(
+                        $slug,
+                        fn (User $user) => $user->hasPermission($slug)
+                    );
+                });
+        } catch (\Throwable $exception) {
+            report($exception);
         }
     }
 }

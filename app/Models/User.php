@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -40,16 +41,35 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class)
+            ->withTimestamps();
+    }
+
     /**
      * Determine if the user's role has the given permission slug.
      */
     public function hasPermission(string $slug): bool
     {
-        if ($this->role === null) {
-            return false;
+        // System Administrator always has access.
+        if ($this->hasRole('system-administrator')) {
+            return true;
         }
 
-        return $this->role->permissions->contains('slug', $slug);
+        // Check permissions assigned directly to the user.
+        if (
+            $this->permissions()
+                ->where('slug', $slug)
+                ->exists()
+        ) {
+            return true;
+        }
+
+        // Check permissions inherited from the role.
+        return $this->role?->permissions()
+            ->where('slug', $slug)
+            ->exists() ?? false;
     }
 
     /**
