@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -32,10 +32,6 @@ class User extends Authenticatable
         ];
     }
 
-    /* ----------------------------------------------------------
-    | RBAC helpers
-    * ---------------------------------------------------------- */
-
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
@@ -44,39 +40,36 @@ class User extends Authenticatable
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class)
+            ->withPivot('denied')
             ->withTimestamps();
     }
 
-    /**
-     * Determine if the user's role has the given permission slug.
-     */
+    public function hasRole(string $slug): bool
+    {
+        return $this->role?->slug === $slug;
+    }
+
     public function hasPermission(string $slug): bool
     {
-        // System Administrator always has access.
         if ($this->hasRole('system-administrator')) {
             return true;
         }
 
-        // Check permissions assigned directly to the user.
-        if (
-            $this->permissions()
-                ->where('slug', $slug)
-                ->exists()
-        ) {
-            return true;
+        $override = $this->permissions()
+            ->where('permissions.slug', $slug)
+            ->first();
+
+        if ($override) {
+            return ! (bool) $override->pivot->denied;
         }
 
-        // Check permissions inherited from the role.
-        return $this->role?->permissions()
-            ->where('slug', $slug)
-            ->exists() ?? false;
-    }
+        if (! $this->role) {
+            return false;
+        }
 
-    /**
-     * Determine if the user has the given role slug.
-     */
-    public function hasRole(string $slug): bool
-    {
-        return $this->role?->slug === $slug;
+        return $this->role
+            ->permissions()
+            ->where('permissions.slug', $slug)
+            ->exists();
     }
 }

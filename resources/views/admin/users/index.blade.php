@@ -435,13 +435,6 @@
                             </td>
 
                             <td>
-                                @if($isSystemAdministrator)
-                                    <div class="permission-list">
-                                        <span class="permission-badge permission-admin">
-                                            Full system access
-                                        </span>
-                                    </div>
-                                @else
                                     <form
                                         method="POST"
                                         action="{{ route('admin.users.update-permissions', $user) }}"
@@ -451,17 +444,27 @@
                                         @method('PATCH')
 
                                         <div class="permission-checkboxes">
-                                                                                        @foreach($permissions as $permission)
+                                            @foreach($permissions as $permission)
                                                 @php
-                                                    $assignedDirectly = $user->permissions
-                                                        ->contains('id', $permission->id);
+                                                    $override = $user->permissions
+                                                        ->firstWhere('id', $permission->id);
+
+                                                    $explicitlyDenied =
+                                                        $override &&
+                                                        (bool) $override->pivot->denied;
+
+                                                    $assignedDirectly =
+                                                        $override &&
+                                                        ! (bool) $override->pivot->denied;
 
                                                     $inheritedFromRole = $user->role
-                                                        ? $user->role->permissions->contains('id', $permission->id)
+                                                        ? $user->role->permissions
+                                                            ->contains('id', $permission->id)
                                                         : false;
 
-                                                    $userAlreadyHasPermission =
-                                                        $assignedDirectly || $inheritedFromRole;
+                                                    $userHasPermission =
+                                                        ! $explicitlyDenied &&
+                                                        ($assignedDirectly || $inheritedFromRole);
                                                 @endphp
 
                                                 <label
@@ -472,22 +475,28 @@
                                                         type="checkbox"
                                                         name="permissions[]"
                                                         value="{{ $permission->id }}"
-                                                        {{ $userAlreadyHasPermission ? 'checked' : '' }}
-                                                        {{ $inheritedFromRole ? 'disabled' : '' }}
-                                                        {{ $inheritedFromRole ? 'onclick=return false;' : '' }}
+                                                        @checked($userHasPermission)
                                                     >
 
                                                     <span>
                                                         {{ $permission->name }}
 
-                                                        @if($inheritedFromRole)
+                                                        @if($explicitlyDenied)
                                                             <small>
-                                                                Already included in {{ $user->role?->name }}
+                                                                Removed from this user
                                                             </small>
                                                         @elseif($assignedDirectly)
-                                                            <small>Direct permission</small>
+                                                            <small>
+                                                                Direct permission
+                                                            </small>
+                                                        @elseif($inheritedFromRole)
+                                                            <small>
+                                                                Included in {{ $user->role?->name }}
+                                                            </small>
                                                         @else
-                                                            <small>Not assigned</small>
+                                                            <small>
+                                                                Not assigned
+                                                            </small>
                                                         @endif
                                                     </span>
                                                 </label>
@@ -501,7 +510,6 @@
                                             Save Permissions
                                         </button>
                                     </form>
-                                @endif
                             </td>
                         </tr>
                     @empty
